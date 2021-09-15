@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import Beer from "./components/Beer";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+const URL = 'https://api.punkapi.com/v2/beers';
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      beers: [],
+    };
+  }
+
+  async componentDidMount() {
+    console.log('mounted 🌵', this.state.beers);
+    const res = await fetch(URL);
+    const data = await res.json();
+    this.setState({
+      beers: data,
+    });
+  }
+
+  componentDidUpdate() {
+    console.log('updated ☀️', this.state.beers);
+  }
+
+  render() {
+    return <div className='grid'>
+      {this.state.beers.map((beer) => {
+        return <Beer singleBeer={beer} />
+      })}
+    </div>;
+  }
 }
 
 export default App;
